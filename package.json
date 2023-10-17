@@ -2,7 +2,7 @@
   "name": "fastifybackend",
   "version": "1.0.0",
   "description": "",
-  "type":"module",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js"
@@ -15,7 +15,13 @@
     "prisma": "^5.4.2"
   },
   "dependencies": {
+    "@fastify/jwt": "^7.2.2",
+    "@fastify/multipart": "^8.0.0",
+    "@fastify/static": "^6.11.2",
     "@prisma/client": "^5.4.2",
-    "fastify": "^4.24.1"
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.3.1",
+    "fastify": "^4.24.1",
+    "fastify-plugin": "^4.5.1"
   }
 }
