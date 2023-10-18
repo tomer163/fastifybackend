@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import * as fs from 'node:fs'
 import { pipeline } from 'node:stream/promises'
 import { randomBytes } from 'node:crypto'
@@ -69,9 +70,9 @@ export default (fastify, opts, done)=>{
             let description
             for await (const part of parts){
                 if(part.type === 'file'){
-                    const newPath = randomBytes(15).toString('hex') + '.' + part.filename.split('.')[part.filename.split('.').length-1]
+                    const newPath = randomBytes(16).toString('hex') + '.' + part.filename.split('.')[part.filename.split('.').length-1]
                     await pipeline(part.file, fs.createWriteStream(`./public/images/${newPath}`))
-                    namearr.push({path: `./public/images/${newPath}`, title: part.fieldname})
+                    namearr.push({path: `${process.env.DOMAIN}:${process.env.PORT}/public/images/${newPath}`, title: part.fieldname})
                 }
                 else if(part.fieldname === 'title'){
                     title = part.value
@@ -136,10 +137,10 @@ export default (fastify, opts, done)=>{
             })
             console.log(postImages)
             postImages.images.forEach(image => {
-                fs.unlink(image.path,(err)=>{
+                fs.unlink('./public' + image.path.split('public')[1] ,(err)=>{
                     if(err) console.log(err)
                 })
-            });
+            })
             const deletedPost = await prisma.post.delete({
                 where:{
                     id: req.params.postId

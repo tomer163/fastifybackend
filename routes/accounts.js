@@ -23,7 +23,7 @@ export default (fastify, opts, done)=>{
                     password: hash
                 }
             })
-            return rep.send(usermade)
+            return rep.code(201).send(usermade)
         } catch(err){
             console.log(err)
             return rep.send(err)
