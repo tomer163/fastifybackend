@@ -12,6 +12,7 @@ model user {
   username String @unique
   password String @unique
   posts    post[]
+  comments comment[]
 }
 
 model post {
@@ -21,6 +22,7 @@ model post {
   description String
   userId      String
   images      image[]
+  comments    comment[]
   author      user     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -30,4 +32,14 @@ model image {
   title  String?
   postId String
   post   post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model comment {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  content    String
+  userId     String
+  postId     String
+  writer     user     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  inPost     post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 }

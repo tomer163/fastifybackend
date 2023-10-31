@@ -12,6 +12,29 @@ export default (fastify, opts, done)=>{
     })
 
 
+    fastify.get('/curUserInfo',
+    {
+        onRequest: fastify.authenticate
+    },
+    async(req,rep)=>{
+        try{
+            const user = await prisma.user.findFirstOrThrow({
+                where:{
+                    id: req.user.data
+                },
+                select:{
+                    username:true,
+                    id: true
+                }
+            })
+            rep.send(user)
+        }
+        catch(err){
+            rep.send(err)
+        }
+    })
+
+
 
     fastify.post('/signup', async (req,rep)=>{
         try{

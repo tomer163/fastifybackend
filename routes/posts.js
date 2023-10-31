@@ -13,7 +13,15 @@ export default (fastify, opts, done)=>{
         try{
             const posts = await prisma.post.findMany({
                 include:{
-                    images:true
+                    images:true,
+                    author:{
+                        select:{
+                            username:true
+                        }
+                    }
+                },
+                orderBy: {
+                    createdAt:'desc'
                 }
             })
             return rep.send(posts)
@@ -25,7 +33,7 @@ export default (fastify, opts, done)=>{
     })
 
 
-
+    //fix needed: change prisma.user to prisma.post
     fastify.get('/postsByCurUser',
     {
         onRequest: fastify.authenticate
@@ -43,7 +51,7 @@ export default (fastify, opts, done)=>{
                             images:true
                         },
                         orderBy: {
-                            createdAt: 'desc'
+                            createdAt:'desc'
                         }
                     }
                 }
@@ -91,6 +99,10 @@ export default (fastify, opts, done)=>{
                             data: namearr
                         }
                     }
+                },
+                include:{
+                    author:true,
+                    images:true
                 }
             })
             rep.send(createdPost)
@@ -129,7 +141,8 @@ export default (fastify, opts, done)=>{
         try{
             const postImages = await prisma.post.findFirstOrThrow({
                 where: {
-                    id: req.params.postId
+                    id: req.params.postId,
+                    userId: req.user.data
                 },
                 include:{
                     images: true

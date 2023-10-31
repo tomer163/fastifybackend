@@ -8,6 +8,7 @@ import Fastify from "fastify"
 //routes
 import accountRoute from './routes/accounts.js'
 import postsRoute from './routes/posts.js'
+import commentRoute from './routes/comments.js'
 
 //plugins & others
 import jwt from './plugins/jwt.js'
@@ -43,6 +44,8 @@ fastify.decorate('prisma', new PrismaClient())
 //routes
 fastify.register(accountRoute, { prefix: '/api' })
 fastify.register(postsRoute, { prefix: '/api' })
+fastify.register(commentRoute, { prefix: '/api' })
+
 
 
 fastify.listen({ port: process.env.PORT }, (err, address)=>{
